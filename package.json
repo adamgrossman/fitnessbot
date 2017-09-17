@@ -1,0 +1,19 @@
+{
+  "name": "farewell-fitness",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "standard"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adamgrossman/fitnessbot.git"
+  },
+  "author": "Adam Grossman",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/adamgrossman/fitnessbot/issues"
+  },
+  "homepage": "https://github.com/adamgrossman/fitnessbot#readme"
+}
