@@ -1,54 +1,79 @@
-
 'use strict'
 
-const express = require('express')
-const proxy = require('express-http-proxy')
-const bodyParser = require('body-parser')
-const _ = require('lodash')
-const config = require('./config')
-const commands = require('./commands')
-// const helpCommand = require('./commands/help')
+var _ = require('lodash')
+var config = require('./config')
+var trending = require('github-trending')
+var Botkit = require('botkit')
+var moment = require('moment-timezone')
 
-let bot = require('./bot')
+var controller = Botkit.slackbot({})
+var bot = controller.spawn()
 
-let app = express()
+// bot.configureIncomingWebhook({ url: config('WEBHOOK_URL') })
+bot.configureIncomingWebhook({ url: 'https://hooks.slack.com/services/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' })
 
-if (config('PROXY_URI')) {
-  app.use(proxy(config('PROXY_URI'), {
-    forwardPath: (req, res) => { return require('url').parse(req.url).path }
-  }))
+var msgDefaults = {
+  response_type: 'in_channel',
+  username: 'testfit',
+  icon_emoji: config('ICON_EMOJI')
 }
 
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }))
+var activeHours = ['9', '10', '11', '12', '14', '15', '16']
+var today = moment().tz('America/Los_Angeles')
+var hourOfDay = today.format('H')
 
-app.get('/', (req, res) => { res.send('\n 👋 🌍 \n') })
+function notificationValid() {
+  return true
+  if (today.weekday() === 0 || today.weekday() === 6) {
+    return false
+  } else if (activeHours.indexOf(hourOfDay) === -1) {
+    return false
+  }
+  return true
+}
 
-// app.post('/commands/starbot', (req, res) => {
-//   let payload = req.body
-//
-//   if (!payload || payload.token !== config('COMMAND_TOKEN')) {
-//     let err = '✋  Star—what? An invalid slash token was provided\n' +
-//               '   Is your Slack slash token correctly configured?'
-//     console.log(err)
-//     res.status(401).end(err)
-//     return
-//   }
-//
-//   let cmd = _.reduce(commands, (a, cmd) => {
-//     return payload.text.match(cmd.pattern) ? cmd : a
-//   }, helpCommand)
-//
-//   cmd.handler(payload, res)
-// })
+function determineGreeting() {
+  var greetings = [
+    'Hey there! It\'s time for... ',
+    'Me again! How about... ',
+    'You\'re gonna hate me, but... ',
+    'I\'ve got a fun one for you! Let\'s do... ',
+    'Yup, you guessed it... '
+  ]
+  var greeting = ''
+  switch(hourOfDay) {
+    case '9':
+      greeting = 'Good morning! Let\'s get this day started with... '
+    case '14':
+      greeting = 'Time to work off that lunch... '
+    case '16':
+      greeting = 'Last one! Let\'s do... '
+    default:
+      greeting = greetings[Math.floor(Math.random() * greetings.length)]
+  }
+  return greeting
+}
 
-app.listen(config('PORT'), (err) => {
+function determineExercise() {
+  var exercises = [
+    '20 push-ups (2 sets of 10 each).',
+    '20 squats.',
+    'a 1 minute plank.',
+    '10 tricep dips.',
+    '20 calf raises (2 sets of 10 each).',
+    '20 lunges (10 for each leg).'
+  ]
+  return exercises[Math.floor(Math.random() * exercises.length)]
+}
+
+trending('javascript', (err, repos) => {
   if (err) throw err
 
-  console.log(`\n🚀  Starbot LIVES on PORT ${config('PORT')} 🚀`)
-
-  if (config('SLACK_TOKEN')) {
-    console.log(`🤖  beep boop: @starbot is real-time\n`)
-    bot.listen({ token: config('SLACK_TOKEN') })
+  if (notificationValid()) {
+    var text = determineGreeting() + determineExercise()
+    let msg = _.defaults({ "text": text }, msgDefaults)
+    bot.sendWebhook(msg, (err, res) => {
+      if (err) throw err
+    })
   }
 })

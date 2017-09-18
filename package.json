@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "start": "node ./src",
-    "notify": "node ./src/tasks/notify",
+    "notify": "node ./src/index",
     "test": "standard"
   },
   "author": {
