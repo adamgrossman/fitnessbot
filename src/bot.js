@@ -1,11 +1,10 @@
-
 'use strict'
 
-const slack = require('slack')
-const _ = require('lodash')
-const config = require('./config')
+var slack = require('slack')
+var _ = require('lodash')
+var config = require('./config')
 
-let bot = slack.rtm.client()
+var bot = slack.rtm.client()
 
 bot.started((payload) => {
   this.self = payload.self
@@ -23,9 +22,7 @@ bot.message((msg) => {
     text: 'Let\'s get moving!'
   }, (err, data) => {
     if (err) throw err
-
-    let txt = _.truncate(data.message.text)
-
+    var txt = _.truncate(data.message.text)
     console.log(`${txt}`)
   })
 })
