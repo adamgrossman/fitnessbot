@@ -9,8 +9,7 @@ var moment = require('moment-timezone')
 var controller = Botkit.slackbot({})
 var bot = controller.spawn()
 
-// bot.configureIncomingWebhook({ url: config('WEBHOOK_URL') })
-bot.configureIncomingWebhook({ url: 'https://hooks.slack.com/services/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' })
+bot.configureIncomingWebhook({ url: config('WEBHOOK_URL') })
 
 var msgDefaults = {
   response_type: 'in_channel',
@@ -23,7 +22,6 @@ var today = moment().tz('America/Los_Angeles')
 var hourOfDay = today.format('H')
 
 function notificationValid() {
-  return true
   if (today.weekday() === 0 || today.weekday() === 6) {
     return false
   } else if (activeHours.indexOf(hourOfDay) === -1) {
