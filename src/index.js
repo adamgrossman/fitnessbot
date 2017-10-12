@@ -2,7 +2,6 @@
 
 var _ = require('lodash')
 var config = require('./config')
-var trending = require('github-trending')
 var Botkit = require('botkit')
 var moment = require('moment-timezone')
 
@@ -64,9 +63,7 @@ function determineExercise() {
   return exercises[Math.floor(Math.random() * exercises.length)]
 }
 
-trending('javascript', (err, repos) => {
-  if (err) throw err
-
+function notify() {
   if (notificationValid()) {
     var text = determineGreeting() + determineExercise()
     let msg = _.defaults({ "text": text }, msgDefaults)
@@ -74,4 +71,6 @@ trending('javascript', (err, repos) => {
       if (err) throw err
     })
   }
-})
+}
+
+notify()
