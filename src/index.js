@@ -8,7 +8,7 @@ var moment = require('moment-timezone')
 var controller = Botkit.slackbot({})
 var bot = controller.spawn()
 
-bot.configureIncomingWebhook({ url: config('WEBHOOK_URL') })
+bot.configureIncomingWebhook({ url: process.env.WEBHOOK_URL })
 
 var msgDefaults = {
   response_type: 'in_channel',
@@ -64,13 +64,13 @@ function determineExercise() {
 }
 
 function notify() {
-  if (notificationValid()) {
+  // if (notificationValid()) {
     var text = determineGreeting() + determineExercise()
     let msg = _.defaults({ "text": text }, msgDefaults)
     bot.sendWebhook(msg, (err, res) => {
       if (err) throw err
     })
-  }
+  // }
 }
 
 notify()
