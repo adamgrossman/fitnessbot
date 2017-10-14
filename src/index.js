@@ -64,13 +64,13 @@ function determineExercise() {
 }
 
 function notify() {
-  if (notificationValid()) {
+  // if (notificationValid()) {
     var text = determineGreeting() + determineExercise()
     let msg = _.defaults({ "text": text }, msgDefaults)
     bot.sendWebhook(msg, (err, res) => {
       if (err) throw err
     })
-  }
+  // }
 }
 
 notify()
