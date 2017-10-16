@@ -25,7 +25,7 @@ function notificationValid() {
     return false
   } else if (activeHours.indexOf(hourOfDay) === -1) {
     return false
-  } else if (today.format('mm') < 5) {
+  } else if (today.format('mm') > 5) {
     return false
   }
   return true
