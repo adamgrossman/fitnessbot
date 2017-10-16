@@ -16,7 +16,7 @@ var msgDefaults = {
   icon_emoji: config('ICON_EMOJI')
 }
 
-var activeHours = ['9', '10', '11', '12', '14', '15', '16']
+var activeHours = ['10', '11', '12', '14', '15', '16']
 var today = moment().tz('America/Los_Angeles')
 var hourOfDay = today.format('H')
 
@@ -39,7 +39,7 @@ function determineGreeting() {
   ]
   var greeting = ''
   switch(hourOfDay) {
-    case '9':
+    case '10':
       greeting = 'Good morning! Let\'s get this day started with... '
     case '14':
       greeting = 'Time to work off that lunch... '
