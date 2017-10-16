@@ -56,7 +56,6 @@ function determineExercise() {
     '20 push-ups (2 sets of 10 each).',
     '20 squats.',
     'a 1 minute plank.',
-    '10 tricep dips.',
     '20 calf raises (2 sets of 10 each).',
     '20 lunges (10 for each leg).'
   ]
